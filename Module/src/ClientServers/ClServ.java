@@ -12,56 +12,57 @@ public class ClServ implements Closeable {
     public ClServ(String ip, int port) {
         try {
             this.socket = new Socket(ip, port);
-            this.reader = createReader();
-            this.writer = createWriter();
+            this.reader = createReader(socket.getInputStream());
+            this.writer = createWriter(socket.getOutputStream());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error creating client socket", e);
         }
     }
 
     public ClServ(ServerSocket server) {
         try {
             this.socket = server.accept();
-            this.reader = createReader();
-            this.writer = createWriter();
+            this.reader = createReader(socket.getInputStream());
+            this.writer = createWriter(socket.getOutputStream());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error accepting client connection", e);
         }
     }
 
-    private BufferedReader createReader() throws IOException {
-
-        return new BufferedReader(new InputStreamReader(socket.getInputStream()));
+    private BufferedReader createReader(InputStream inputStream) {
+        return new BufferedReader(new InputStreamReader(inputStream));
     }
 
-    private BufferedWriter createWriter() throws IOException {
-        return new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+    private BufferedWriter createWriter(OutputStream outputStream) {
+        return new BufferedWriter(new OutputStreamWriter(outputStream));
     }
 
-
-    public void writeLine(String massege) {
+    public void writeLine(String message) {
         try {
-            writer.write(massege);
+            writer.write(message);
             writer.newLine();
             writer.flush();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error writing message", e);
         }
     }
 
-    public String readerLine() {
+    public String readLine() {
         try {
             return reader.readLine();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error reading message", e);
         }
-
     }
 
     @Override
-    public void close() throws IOException {
-        writer.close();
-        reader.close();
-        socket.close();
+    public void close() {
+        try {
+            writer.close();
+            reader.close();
+            socket.close();
+        } catch (IOException e) {
+            throw new RuntimeException("Error closing resources", e);
+        }
     }
 }

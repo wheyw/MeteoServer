@@ -1,8 +1,7 @@
-import ClientServers.ClServ;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.URL;
 import java.util.HashMap;
@@ -11,54 +10,53 @@ import java.util.ResourceBundle;
 
 public class SController implements Initializable {
     public String request;
-    public String respons;
-    public Map<String, Integer> map = new HashMap();
+    public String response;
+    public final Map<String, Integer> map = new HashMap<>();
     private String res;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        try (ServerSocket server = new ServerSocket(2654);) {
+        try (ServerSocket server = new ServerSocket(2654)) {
             System.out.println("Server started");
 
-            while (true)
+            while (true) {
                 try (ClServ module = new ClServ(server)) {
-                    request = module.readerLine();
-
-                    synchronized (this) {
-                        if (request.equals("1")) {
-                            module.writeLine(res);
-                        } else {
-
-                                if (map != null && map.equals(request) ) {
-                                    respons = map.get(request).toString();
-                                    module.writeLine(request);
-                                    module.writeLine(respons);
-                                    System.out.println("" + request);
-                                    System.out.println("" + respons);
-                                    res = new String(request + respons);
-                                    System.out.println(res);
-                                } else {
-
-                                    respons = module.readerLine();
-                                    map.put(request, Integer.valueOf(respons));
-                                    module.writeLine(request);
-                                    module.writeLine(respons);
-                                    System.out.println(map);
-                                    //System.out.println("" + request);
-                                    //System.out.println("" + respons);
-                                    res = new String(request + respons);
-                                    System.out.println(res);
-                                }
-                        }
-                    }
-
+                    handleClient(module);
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    System.err.println("Error handling client: " + e.getMessage());
                 }
-
+            }
         } catch (IOException e) {
+            System.err.println("Server error: " + e.getMessage());
             throw new RuntimeException(e);
+        }
+    }
+
+    private void handleClient(ClServ module) throws IOException {
+        request = module.readerLine();
+
+        synchronized (this) {
+            if ("1".equals(request)) {
+                module.writeLine(res);
+            } else {
+                if (map.containsKey(request)) {
+                    response = map.get(request).toString();
+                    module.writeLine(request);
+                    module.writeLine(response);
+                    System.out.println("Request: " + request);
+                    System.out.println("Response: " + response);
+                    res = request + response;
+                    System.out.println("Result: " + res);
+                } else {
+                    response = module.readerLine();
+                    map.put(request, Integer.valueOf(response));
+                    module.writeLine(request);
+                    module.writeLine(response);
+                    System.out.println("Map: " + map);
+                    res = request + response;
+                    System.out.println("Result: " + res);
+                }
+            }
         }
     }
 }
