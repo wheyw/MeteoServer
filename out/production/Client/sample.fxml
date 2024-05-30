@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="356.0" prefWidth="550.0" style="-fx-background-color: #6495ED;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+   <children>
+      <ImageView fx:id="im" fitHeight="241.0" fitWidth="299.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+      </ImageView>
+      <Pane layoutX="336.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F0FFFF; -fx-background-radius: 10;">
+         <children>
+            <Label layoutX="14.0" layoutY="14.0" text="Sity:">
+               <font>
+                  <Font name="Josefin Sans" size="36.0" />
+               </font>
+            </Label>
+            <Label layoutX="14.0" layoutY="100.0" text="Temperature:">
+               <font>
+                  <Font name="Josefin Sans" size="30.0" />
+               </font>
+            </Label>
+            <Label fx:id="name" layoutX="14.0" layoutY="57.0">
+               <font>
+                  <Font name="Josefin Sans" size="36.0" />
+               </font>
+            </Label>
+            <Label fx:id="temp" layoutX="14.0" layoutY="140.0">
+               <font>
+                  <Font name="Josefin Sans" size="30.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <TextField fx:id="fsity" layoutX="14.0" layoutY="289.0" prefHeight="43.0" prefWidth="299.0" />
+      <Button layoutX="336.0" layoutY="289.0" mnemonicParsing="false" onAction="#clOk" prefHeight="43.0" prefWidth="49.0" style="-fx-background-color: #F0FFFF; -fx-background-radius: 20;" text="Ok">
+         <font>
+            <Font name="Josefin Sans" size="18.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
