@@ -39,9 +39,9 @@ public class ClServ implements Closeable {
     }
 
 
-    public void writeLine(String massege) {
+    public void writeLine(String message) {
         try {
-            writer.write(massege);
+            writer.write(message);
             writer.newLine();
             writer.flush();
         } catch (IOException e) {

@@ -1,5 +1,4 @@
 import ClientServers.ClServ;
-import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 
 import java.io.*;
@@ -11,8 +10,8 @@ import java.util.ResourceBundle;
 
 public class SController implements Initializable {
     public String request;
-    public String respons;
-    public Map<String, Integer> map = new HashMap();
+    public String response_;
+    public Map<String, Integer> map = new HashMap<String, Integer>();
     private String res;
 
     @Override
@@ -29,25 +28,22 @@ public class SController implements Initializable {
                         if (request.equals("1")) {
                             module.writeLine(res);
                         } else {
-
                                 if (map != null && map.equals(request) ) {
-                                    respons = map.get(request).toString();
+                                    response_ = map.get(request).toString();
                                     module.writeLine(request);
-                                    module.writeLine(respons);
-                                    System.out.println("" + request);
-                                    System.out.println("" + respons);
-                                    res = new String(request + respons);
+                                    module.writeLine(response_);
+                                    System.out.println(request);
+                                    System.out.println(response_);
+                                    res = request + response_;
                                     System.out.println(res);
                                 } else {
 
-                                    respons = module.readerLine();
-                                    map.put(request, Integer.valueOf(respons));
+                                    response_ = module.readerLine();
+                                    map.put(request, Integer.valueOf(response_));
                                     module.writeLine(request);
-                                    module.writeLine(respons);
+                                    module.writeLine(response_);
                                     System.out.println(map);
-                                    //System.out.println("" + request);
-                                    //System.out.println("" + respons);
-                                    res = new String(request + respons);
+                                    res = request + response_;
                                     System.out.println(res);
                                 }
                         }

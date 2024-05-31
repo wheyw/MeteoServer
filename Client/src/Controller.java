@@ -14,10 +14,10 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
     public ImageView im;
-    public TextField fsity;
+    public TextField tf_city;
     public Label name;
     public Label temp;
-    public String sity;
+    public String city;
     public String response;
     public String request;
     public String IP;
@@ -31,8 +31,8 @@ public class Controller implements Initializable {
         temp.setText(response);
     }
 
-    public void clOk(ActionEvent actionEvent) {
-        sity = fsity.getText();
+    public void clock(ActionEvent actionEvent) {
+        city = tf_city.getText();
         init();
         name.setText(request);
         temp.setText(response);
@@ -42,11 +42,11 @@ public class Controller implements Initializable {
 
         try (ClServ module = new ClServ(IP, 2654)) {
             System.out.println("Connected to server");
-            request = sity;
+            request = city;
             module.writeLine(request);
             request = module.readerLine();
             response = module.readerLine();
-            System.out.println("" + response);
+            System.out.println(response);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -60,6 +60,7 @@ public class Controller implements Initializable {
         } catch (UnknownHostException e) {
             System.out.println(" ошибка доступа ->" + e);
         }
+        assert myIP != null;
         IP =  myIP.getHostAddress();
         return IP;
     }
