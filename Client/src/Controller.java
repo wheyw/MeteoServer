@@ -13,54 +13,52 @@ import java.net.UnknownHostException;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
-    public ImageView im;
-    public TextField fsity;
-    public Label name;
-    public Label temp;
-    public String sity;
+    public ImageView imageView;
+    public TextField cityTextField;
+    public Label cityNameLabel;
+    public Label temperatureLabel;
+    public String city;
     public String response;
     public String request;
-    public String IP;
+    public String ipAddress;
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        im.setImage(new Image("image.png"));
-        getIP();
-        name.setText(request);
-        temp.setText(response);
+        imageView.setImage(new Image("image.png"));
+        getIPAddress();
+        cityNameLabel.setText(request);
+        temperatureLabel.setText(response);
     }
 
-    public void clOk(ActionEvent actionEvent) {
-        sity = fsity.getText();
+    public void onOkButtonClicked(ActionEvent actionEvent) {
+        city = cityTextField.getText();
         init();
-        name.setText(request);
-        temp.setText(response);
+        cityNameLabel.setText(request);
+        temperatureLabel.setText(response);
     }
 
     public void init() {
-
-        try (ClServ module = new ClServ(IP, 2654)) {
-            System.out.println("Connected to server");
-            request = sity;
+        try (ClServ module = new ClServ(ipAddress, 2654)) {
+            System.out.println("Подключен к серверу");
+            request = city;
             module.writeLine(request);
-            request = module.readerLine();
-            response = module.readerLine();
-            System.out.println("" + response);
-
+            request = module.readLine();
+            response = module.readLine();
+            System.out.println(response);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public String getIP() {
+    public String getIPAddress() {
         InetAddress myIP = null;
         try {
             myIP = InetAddress.getLocalHost();
         } catch (UnknownHostException e) {
-            System.out.println(" ошибка доступа ->" + e);
+            System.out.println("Ошибка доступа ->" + e);
         }
-        IP =  myIP.getHostAddress();
-        return IP;
+        ipAddress = myIP.getHostAddress();
+        return ipAddress;
     }
 }
