@@ -19,7 +19,7 @@ public class SController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         try (ServerSocket server = new ServerSocket(2654);) {
-            System.out.println("Server started");
+            System.out.println("Server started now");
 
             while (true)
                 try (ClServ module = new ClServ(server)) {
