@@ -1,3 +1,5 @@
+package com.example.meteoserver;
+
 import ClientServers.ClServ;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -25,7 +27,7 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        im.setImage(new Image("image.png"));
+        im.setImage(new Image("src/main/resources/com.example.meteoserver/images/image.png"));
         getIP();
         name.setText(request);
         temp.setText(response);
