@@ -53,7 +53,7 @@ public class Controller implements Initializable {
             e.printStackTrace();
         }
     }
-    public String getIPAddress() {
+    public String getIPAddresss() {
         InetAddress myIP = null;
         try {
             myIP = InetAddress.getLocalHost();
