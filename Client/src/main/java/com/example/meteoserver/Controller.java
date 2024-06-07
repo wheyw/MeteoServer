@@ -52,7 +52,7 @@ public class Controller implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }///sdfssdfsdfsd
     public String getIPAddress() {
         InetAddress myIP = null;
         try {
