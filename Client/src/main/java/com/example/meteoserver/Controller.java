@@ -1,6 +1,5 @@
 package com.example.meteoserver;
 
-import ClientServers.ClServ;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -58,6 +57,7 @@ public class Controller implements Initializable {
         try {
             myIP = InetAddress.getLocalHost();
         } catch (UnknownHostException e) {
+            System.out.println("Я в игре");
             System.out.println("Ошибка доступа ->" + e);
         }
         ipAddress = myIP.getHostAddress();
