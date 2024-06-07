@@ -9,5 +9,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="Module" />
     <orderEntry type="library" name="lib" level="project" />
+    <orderEntry type="library" name="javafx-sdk-22.0" level="project" />
   </component>
 </module>
