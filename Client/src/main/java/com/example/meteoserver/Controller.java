@@ -1,3 +1,5 @@
+package com.example.meteoserver;
+
 import ClientServers.ClServ;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -15,48 +17,50 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
     public ImageView imageView;
     public TextField cityTextField;
-    public Label nameLabel;
-    public Label tempLabel;
+    public Label cityNameLabel;
+    public Label temperatureLabel;
+
     public String city;
     public String response;
     public String request;
-    public String IP;
+    public String ipAddress;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        imageView.setImage(new Image("image.png"));
-        getLocalIPAddress();
-        nameLabel.setText(request);
-        tempLabel.setText(response);
+        im.setImage(new Image("src/main/resources/com.example.meteoserver/images/image.png"));
+        getIP();
+        name.setText(request);
+        temp.setText(response);
+
     }
 
     public void onOkButtonClicked(ActionEvent actionEvent) {
         city = cityTextField.getText();
-        sendRequestToServer();
-        nameLabel.setText(request);
-        tempLabel.setText(response);
+        init();
+        cityNameLabel.setText(request);
+        temperatureLabel.setText(response);
     }
 
-    private void sendRequestToServer() {
-        try (ClServ module = new ClServ(IP, 2654)) {
-            System.out.println("Connected to server");
+    public void init() {
+        try (ClServ module = new ClServ(ipAddress, 2654)) {
+            System.out.println("Подключен к серверу");
             request = city;
             module.writeLine(request);
-            request = module.readerLine();
-            response = module.readerLine();
-            System.out.println("Response from server: " + response);
+            request = module.readLine();
+            response = module.readLine();
+            System.out.println(response);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-    private void getLocalIPAddress() {
+    public String getIPAddress() {
         InetAddress myIP = null;
         try {
             myIP = InetAddress.getLocalHost();
         } catch (UnknownHostException e) {
-            System.out.println("Error accessing IP address ->" + e);
+            System.out.println("Ошибка доступа ->" + e);
         }
-        IP = (myIP != null) ? myIP.getHostAddress() : "Unknown";
+        ipAddress = myIP.getHostAddress();
+        return ipAddress;
     }
 }

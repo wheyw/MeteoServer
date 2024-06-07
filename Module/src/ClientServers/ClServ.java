@@ -4,65 +4,68 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class ClServ implements Closeable {
+public class ClientServer implements Closeable {
     private final Socket socket;
-    private final BufferedReader reader;
-    private final BufferedWriter writer;
+    private final BufferedReader bufferedReader;
+    private final BufferedWriter bufferedWriter;
 
-    public ClServ(String ip, int port) {
+    // Конструктор для клиента, инициализирует соединение с сервером по IP и порту
+    public ClientServer(String ipAddress, int port) {
         try {
-            this.socket = new Socket(ip, port);
-            this.reader = createReader(socket.getInputStream());
-            this.writer = createWriter(socket.getOutputStream());
+            this.socket = new Socket(ipAddress, port);
+            this.bufferedReader = createBufferedReader();
+            this.bufferedWriter = createBufferedWriter();
         } catch (IOException e) {
-            throw new RuntimeException("Error creating client socket", e);
+            throw new RuntimeException("Ошибка подключения к серверу", e);
         }
     }
 
-    public ClServ(ServerSocket server) {
+    // Конструктор для сервера, принимает входящее соединение
+    public ClientServer(ServerSocket serverSocket) {
         try {
-            this.socket = server.accept();
-            this.reader = createReader(socket.getInputStream());
-            this.writer = createWriter(socket.getOutputStream());
+            this.socket = serverSocket.accept();
+            this.bufferedReader = createBufferedReader();
+            this.bufferedWriter = createBufferedWriter();
         } catch (IOException e) {
-            throw new RuntimeException("Error accepting client connection", e);
+            throw new RuntimeException("Ошибка при приеме клиентского соединения", e);
         }
     }
 
-    private BufferedReader createReader(InputStream inputStream) {
-        return new BufferedReader(new InputStreamReader(inputStream));
+    // Создание BufferedReader для чтения данных из сокета
+    private BufferedReader createBufferedReader() throws IOException {
+        return new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
 
-    private BufferedWriter createWriter(OutputStream outputStream) {
-        return new BufferedWriter(new OutputStreamWriter(outputStream));
+    // Создание BufferedWriter для записи данных в сокет
+    private BufferedWriter createBufferedWriter() throws IOException {
+        return new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
     }
 
+    // Метод для отправки строки сообщения на сервер/клиент
     public void writeLine(String message) {
         try {
-            writer.write(message);
-            writer.newLine();
-            writer.flush();
+            bufferedWriter.write(message);
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
         } catch (IOException e) {
-            throw new RuntimeException("Error writing message", e);
+            throw new RuntimeException("Ошибка чтения из сокета", e);
         }
     }
 
+    // Метод для чтения строки сообщения с сервера/клиента
     public String readLine() {
         try {
-            return reader.readLine();
+            return bufferedReader.readLine();
         } catch (IOException e) {
-            throw new RuntimeException("Error reading message", e);
+            throw new RuntimeException("Ошибка чтения из сокета", e);
         }
     }
 
+    // Метод закрытия ресурсов (сокета, BufferedReader и BufferedWriter)
     @Override
-    public void close() {
-        try {
-            writer.close();
-            reader.close();
-            socket.close();
-        } catch (IOException e) {
-            throw new RuntimeException("Error closing resources", e);
-        }
+    public void close() throws IOException {
+        bufferedWriter.close();
+        bufferedReader.close();
+        socket.close();
     }
 }
