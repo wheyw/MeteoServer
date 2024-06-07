@@ -19,6 +19,9 @@ public class ServerController implements Initializable {
     // Переменная для хранения комбинированного ответа
     private String combinedResponse;
 
+    // Лог файл
+    private final String logFilePath = "server_log.txt";
+
     // Метод инициализации, вызывается при запуске контроллера
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -57,6 +60,7 @@ public class ServerController implements Initializable {
                                 System.out.println("Комбинированный ответ: " + combinedResponse);
                             }
                         }
+                        logToFile(clientRequest, serverResponse);
                     }
                 } catch (IOException e) {
                     // Обработка ошибок при подключении клиента
@@ -66,6 +70,16 @@ public class ServerController implements Initializable {
         } catch (IOException e) {
             // Обработка ошибок при запуске сервера
             throw new RuntimeException("Ошибка при запуске сервера", e);
+        }
+    }
+
+    // Метод для записи логов в файл
+    private void logToFile(String request, String response) {
+        try (BufferedWriter logWriter = new BufferedWriter(new FileWriter(logFilePath, true))) {
+            logWriter.write("Запрос: " + request + ", Ответ: " + response);
+            logWriter.newLine();
+        } catch (IOException e) {
+            System.err.println("Ошибка при записи в лог файл: " + e.getMessage());
         }
     }
 }
