@@ -1,7 +1,8 @@
+
 import ClientServers.ClientServer;
 import javafx.fxml.Initializable;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.URL;
 import java.util.HashMap;
@@ -80,6 +81,34 @@ public class ServerController implements Initializable {
             logWriter.newLine();
         } catch (IOException e) {
             System.err.println("Ошибка при записи в лог файл: " + e.getMessage());
+        }
+    }
+
+    private void handleClient(ClServ module) throws IOException {
+        request = module.readerLine();
+
+        synchronized (this) {
+            if ("1".equals(request)) {
+                module.writeLine(res);
+            } else {
+                if (map.containsKey(request)) {
+                    response = map.get(request).toString();
+                    module.writeLine(request);
+                    module.writeLine(response);
+                    System.out.println("Request: " + request);
+                    System.out.println("Response: " + response);
+                    res = request + response;
+                    System.out.println("Result: " + res);
+                } else {
+                    response = module.readerLine();
+                    map.put(request, Integer.valueOf(response));
+                    module.writeLine(request);
+                    module.writeLine(response);
+                    System.out.println("Map: " + map);
+                    res = request + response;
+                    System.out.println("Result: " + res);
+                }
+            }
         }
     }
 }

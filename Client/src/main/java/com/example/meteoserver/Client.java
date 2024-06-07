@@ -15,12 +15,6 @@ public class Client extends Application {
         primaryStage.setScene(new Scene(root, 550, 400));
         primaryStage.show();
     }
-
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-
+    public static void main(String[] args) { launch(args); }
 }
 

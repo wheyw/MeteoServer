@@ -8,7 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
@@ -19,11 +19,11 @@ public class Controller implements Initializable {
     public TextField cityTextField;
     public Label cityNameLabel;
     public Label temperatureLabel;
+
     public String city;
     public String response;
     public String request;
     public String ipAddress;
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -31,6 +31,7 @@ public class Controller implements Initializable {
         getIP();
         name.setText(request);
         temp.setText(response);
+
     }
 
     public void onOkButtonClicked(ActionEvent actionEvent) {
@@ -52,8 +53,7 @@ public class Controller implements Initializable {
             e.printStackTrace();
         }
     }
-
-    public String getIPAddress() {
+    public String getIPAddresss() {
         InetAddress myIP = null;
         try {
             myIP = InetAddress.getLocalHost();
