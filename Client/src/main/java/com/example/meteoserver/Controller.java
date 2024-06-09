@@ -1,11 +1,14 @@
-package com.example.meteoserver;
-
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import org.meteoServer.services.WeatherData;
+import org.meteoServer.services.WeatherService;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -14,10 +17,23 @@ import java.net.UnknownHostException;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
+
+    @FXML
+    private TextField cityInput;
+
+    @FXML
+    private Label cityLabel;
+
+    @FXML
+    private Button getWeatherButton;
+
+    @FXML
+    private Label humidityLabel;
+
+    @FXML
+    private Label temperatureLabel;
+
     public ImageView imageView;
-    public TextField cityTextField;
-    public Label cityNameLabel;
-    public Label temperatureLabel;
 
     public String city;
     public String response;
@@ -26,17 +42,30 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        im.setImage(new Image("src/main/resources/com.example.meteoserver/images/image.png"));
-        getIP();
-        name.setText(request);
-        temp.setText(response);
+        imageView.setImage(new Image("src/main/resources/com.example.meteoserver/images/image.png"));
+        getIPAddresss();
+        cityInput.setText(request);
+        temperatureLabel.setText(response);
 
+        getWeatherButton.setOnMouseClicked(this::handlerGetWeatherButton);
     }
 
+    private void handlerGetWeatherButton(MouseEvent event) {
+        String city = cityInput.getText();
+        try {
+            WeatherData weatherData = WeatherService.getWeather(city);
+            cityInput.setText("City: "+city);
+            temperatureLabel.setText("Temperature: " + weatherData.getTemperature() + "°C");
+            humidityLabel.setText("Humidity: " + weatherData.getHumidity() + "%");
+        } catch (IOException ioException) {
+            temperatureLabel.setText("Error fetching data");
+            humidityLabel.setText("");
+        }
+    }
     public void onOkButtonClicked(ActionEvent actionEvent) {
-        city = cityTextField.getText();
+        city = cityInput.getText();
         init();
-        cityNameLabel.setText(request);
+        cityLabel.setText(request);
         temperatureLabel.setText(response);
     }
 
